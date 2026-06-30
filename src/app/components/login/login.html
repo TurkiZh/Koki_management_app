@@ -1,0 +1,12 @@
+<div class="login-page-container">
+    <!-- Top Navbar Component -->
+    <app-login-navbar></app-login-navbar>
+
+    <!-- Main Login Card Container -->
+    <main class="login-main-content">
+        <app-login-form (loginSuccess)="handleLoginSuccess($event)"></app-login-form>
+    </main>
+
+    <!-- Bottom Footer Component -->
+    <app-login-footer></app-login-footer>
+</div>

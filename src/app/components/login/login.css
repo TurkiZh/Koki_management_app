@@ -1,0 +1,133 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-page-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #ffeccf;
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+  padding: 80px 20px;
+  /* Leave space for absolute positioned header and footer */
+}
+
+/* Centered content block */
+.login-main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 10;
+  animation: fadeScaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ambient Glowing Background Blobs */
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.glow-blob-1 {
+  top: 15%;
+  left: 10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(139, 26, 26, 0.08);
+  /* brand primary red */
+  animation: floatBlob1 20s ease-in-out infinite alternate;
+}
+
+.glow-blob-2 {
+  bottom: 15%;
+  right: 10%;
+  width: 350px;
+  height: 350px;
+  background: rgba(255, 236, 207, 0.75);
+  /* brand peach cream */
+  animation: floatBlob2 25s ease-in-out infinite alternate;
+}
+
+/* Keyframes animations */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatBlob1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(40px, 60px) scale(1.1);
+  }
+
+  100% {
+    transform: translate(-30px, -40px) scale(0.9);
+  }
+}
+
+@keyframes floatBlob2 {
+  0% {
+    transform: translate(0, 0) scale(1.1);
+  }
+
+  50% {
+    transform: translate(-50px, -30px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(30px, 40px) scale(1);
+  }
+}
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .login-page-container {
+    padding: 100px 15px;
+    /* Add extra room for stacked mobile layout header/footer */
+  }
+
+  .glow-blob-1,
+  .glow-blob-2 {
+    width: 200px;
+    height: 200px;
+    filter: blur(60px);
+  }
+}

@@ -1,0 +1,47 @@
+<div class="order-form">
+    <div>
+        <label>Select Product:</label>
+        <!-- Bind the dropdown to productNameInput -->
+        <select [(ngModel)]="productNameInput">
+            <option value="" disabled selected>-- Choose a sweet --</option>
+            <!-- Loop through your dummy data items array -->
+            @for (product of items; track product.id) {
+            <option [value]="product.name">
+                {{ product.name }} (${{ product.price }})
+            </option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Quantity:</label>
+        <input type="number" [(ngModel)]="quantityInput" min="1" />
+    </div>
+
+    <button (click)="onAddOrder()">Add Item</button>
+</div>
+
+<hr />
+
+<div class="order-summary">
+    <h3>Current Order List</h3>
+
+    <ul>
+        @for (item of orderItems(); track item.id) {
+        <li>
+            {{ item.name }} - {{ item.quantity }}x @ ${{ item.price }} each
+            (Subtotal: ${{ item.quantity * item.price }})
+        </li>
+        } @empty {
+        <li>Your order list is empty.</li>
+        }
+    </ul>
+
+    <!-- Displaying the computed total values -->
+    <p><strong>Total Items:</strong> {{ totalItemsCount() }}</p>
+    <p><strong>Total Price:</strong> ${{ totalPrice() }}</p>
+
+    @if (orderItems().length > 0) {
+    <button (click)="onCheckout()">Place Final Order</button>
+    }
+</div>

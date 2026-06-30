@@ -1,0 +1,559 @@
+================================================================================
+   KOKI MANAGEMENT APP — LEARNING PATH & IMPLEMENTATION GUIDE
+================================================================================
+
+PROJECT CONTEXT:
+  A management app for a small sweet factory owner who sells products to coffee
+  shops. Features: account creation for coffee shop owners, order placement,
+  order tracking, and admin management. Will integrate with AWS later.
+
+CURRENT STATE:
+  - app.ts           → bare root component with just a title
+  - app.html         → just shows <h1>Koki Management App</h1>
+  - app.css          → empty
+  - app.routes.ts    → empty routes array
+  - app.config.ts    → has provideRouter already set up (don't touch this yet)
+  - components/      → empty (you will create everything)
+  - services/        → deleted (you will create everything)
+
+HOW TO USE THIS GUIDE:
+  After finishing each course lesson, come here and do the corresponding step.
+  Each step tells you WHAT to build, not HOW — that's what the course teaches.
+  Build it yourself. If you get stuck, ask me to review what you've done.
+
+================================================================================
+STEP 1 — COMPONENTS
+================================================================================
+What you learned: How to create components, use selectors, templates, styles.
+
+What to build:
+  1. Create a LoginComponent         → src/app/components/login/
+  2. Create a SidebarComponent       → src/app/components/sidebar/
+  3. Create a DashboardComponent     → src/app/components/dashboard/
+  4. Create a NewOrderComponent      → src/app/components/new-order/
+  5. Create a OrderHistoryComponent  → src/app/components/order-history/
+  6. Create a CurrentOrderComponent  → src/app/components/current-order/
+
+  Use the Angular CLI to generate them:
+    ng generate component components/login
+    ng generate component components/sidebar
+    ng generate component components/dashboard
+    ng generate component components/new-order
+    ng generate component components/order-history
+    ng generate component components/current-order
+
+  For now, each component just needs a simple HTML template with a heading
+  that says what it is (e.g. <h2>Login</h2>). You'll fill them in later.
+
+  Update app.html to show at least one component to verify it works.
+  (Import it in app.ts and use its selector in app.html)
+
+================================================================================
+STEP 2 — DATA BINDING
+================================================================================
+What you learned: Interpolation {{ }}, property binding [ ], event binding ( ),
+                  two-way binding [( )].
+
+What to build:
+  1. LoginComponent:
+     - Add username and password fields
+     - Use two-way binding [(ngModel)] on the input fields
+       (you'll need to import FormsModule)
+     - Use event binding (click) on a "Login" button
+     - Use interpolation {{ }} to show a welcome message or error message
+     - Use property binding [disabled] to disable the button when fields are empty
+
+  2. NewOrderComponent:
+     - Add a product list with hardcoded product names and prices
+     - Use property binding [disabled] on "Order" buttons for unavailable products
+     - Use event binding (click) to add products to an order array
+     - Use interpolation to show the current order total
+
+================================================================================
+STEP 3 — SIGNALS
+================================================================================
+What you learned: signal(), computed(), effect().
+
+What to build:
+  1. Go back to app.ts:
+     - Convert the title property to a signal: title = signal('Koki Management App')
+     - Update app.html to use title() instead of title
+
+  2. LoginComponent:
+     - Convert username, password, errorMessage to signals
+     - Create a computed signal for whether the form is valid (both fields filled)
+     - Bind the button's [disabled] to the computed signal
+
+  3. NewOrderComponent:
+     - Convert the order items array to a signal
+     - Create a computed signal for total price
+     - Use effect() to log whenever the order changes (for debugging)
+
+  4. CurrentOrderComponent:
+     - Create signals for: orderItems, orderTime, canCancel
+     - Use computed() to calculate total
+     - Use hardcoded data for now
+
+================================================================================
+STEP 4 — CONTROL FLOW STATEMENTS
+================================================================================
+What you learned: @if, @else, @for, @switch, @empty.
+
+What to build:
+  1. LoginComponent:
+     - Use @if to show error message only when it exists
+     - Use @if/@else to toggle between login form and "logged in" state
+
+  2. SidebarComponent:
+     - Create a hardcoded menu items array with: name, icon, requiredRole
+     - Use @for to loop through and display menu items
+     - Use @if to conditionally show admin-only items (hardcode isAdmin for now)
+
+  3. NewOrderComponent:
+     - Use @for to loop through products and display them
+     - Use @if to show "available" vs "unavailable" styling
+     - Use @empty inside @for to show "No products available" when list is empty
+
+  4. OrderHistoryComponent:
+     - Use @for to loop through a hardcoded list of past orders
+     - Use @if to show "No orders yet" when list is empty
+     - Use @switch on order status to show different badges (pending/completed/cancelled)
+
+  5. CurrentOrderComponent:
+     - Use @if to show order details or "No active order" message
+     - Use @for to list ordered items
+
+================================================================================
+STEP 5 — ROUTING
+================================================================================
+What you learned: RouterModule, routerLink, router-outlet, route params, child routes.
+
+What to build:
+  1. Set up routes in app.routes.ts:
+     - '/login'     → LoginComponent
+     - ''           → redirects to '/dashboard'
+     - '/dashboard' → DashboardComponent (with child routes below)
+     - '**'         → redirects to '/login'
+
+  2. Update app.html:
+     - Replace the <h1> with <router-outlet></router-outlet>
+     - Import RouterOutlet in app.ts
+
+  3. Create a MainLayoutComponent (src/app/components/main-layout/):
+     - This wraps the sidebar + content area
+     - Has its own <router-outlet> for child pages
+     - Route '' uses MainLayoutComponent with children:
+         '/dashboard'      → DashboardComponent
+         '/new-order'      → NewOrderComponent
+         '/order-history'  → OrderHistoryComponent
+         '/current-order'  → CurrentOrderComponent
+
+  4. SidebarComponent:
+     - Add [routerLink] to each menu item
+     - Add routerLinkActive to highlight the active page
+
+  5. LoginComponent:
+     - After successful login, use Router.navigate(['/dashboard'])
+
+================================================================================
+STEP 6 — DIRECTIVES
+================================================================================
+What you learned: Built-in directives, creating custom attribute directives.
+
+What to build:
+  1. Create a HighlightDirective (src/app/directives/highlight.directive.ts):
+     - Changes background color on hover
+     - Use @HostListener for mouseenter/mouseleave
+     - Apply it to product cards in NewOrderComponent
+
+  2. Create a RoleBadgeDirective:
+     - Takes a role string as input ('admin', 'owner')
+     - Sets different background colors based on role
+     - Use it in the sidebar or user display
+
+  3. Use existing directives in templates where appropriate
+
+================================================================================
+STEP 7 — COMPONENT LIFECYCLE EVENTS & PIPES
+================================================================================
+What you learned: ngOnInit, ngOnDestroy, ngOnChanges, ngAfterViewInit.
+                  Built-in pipes: date, currency, uppercase, etc.
+
+What to build:
+  1. OrderHistoryComponent:
+     - Use ngOnInit to load order data (hardcoded for now)
+     - Use the date pipe to format order dates: {{ order.date | date:'medium' }}
+     - Use the currency pipe for prices: {{ order.total | currency:'SAR' }}
+
+  2. CurrentOrderComponent:
+     - Use ngOnInit to set up the current order
+     - Use ngOnDestroy to clean up any timers/subscriptions
+     - Use the date pipe for order time
+     - Use uppercase pipe for status display
+
+  3. DashboardComponent:
+     - Use ngOnInit to load summary data
+     - Use ngAfterViewInit if you add any chart or DOM manipulation later
+
+================================================================================
+STEP 8 — GET API CALL INTEGRATION
+================================================================================
+What you learned: HttpClient, provideHttpClient, GET requests, Observables basics.
+
+What to build:
+  1. Add provideHttpClient() to app.config.ts providers
+
+  2. Create ProductService (src/app/services/product.service.ts):
+     - Inject HttpClient
+     - Create getProducts() method that returns an Observable
+     - For now, point it to a dummy URL or use a local JSON file
+       (create src/assets/data/products.json with your product data)
+
+  3. Create OrderService (src/app/services/order.service.ts):
+     - getOrders() → fetches order history
+     - getCurrentOrder() → fetches active order
+     - Use src/assets/data/orders.json for dummy data
+
+  4. Update NewOrderComponent:
+     - Inject ProductService
+     - Call getProducts() in ngOnInit and subscribe to it
+     - Replace hardcoded products with the API data
+
+  5. Update OrderHistoryComponent:
+     - Inject OrderService
+     - Call getOrders() in ngOnInit
+     - Replace hardcoded data
+
+================================================================================
+STEP 9 — TEMPLATE FORMS
+================================================================================
+What you learned: FormsModule, ngModel, ngForm, template-driven validation.
+
+What to build:
+  1. LoginComponent (enhance):
+     - Wrap inputs in a <form> with #loginForm="ngForm"
+     - Add required, minlength validators to inputs
+     - Show validation error messages using loginForm.controls
+     - Disable submit button when form is invalid: [disabled]="loginForm.invalid"
+
+  2. Create a NewAccountComponent (src/app/components/new-account/):
+     - This is for the factory admin to create coffee shop owner accounts
+     - Fields: ownerName, shopName, branchLocation, email, phone
+     - Use template-driven form with validation
+     - Add a route for it: '/admin/new-account'
+
+================================================================================
+STEP 10 — PUT & DELETE API
+================================================================================
+What you learned: HttpClient.put(), HttpClient.delete(), updating/removing data.
+
+What to build:
+  1. OrderService:
+     - Add cancelOrder(orderId) → sends DELETE request
+     - Add updateOrderStatus(orderId, status) → sends PUT request
+
+  2. CurrentOrderComponent:
+     - Wire the "Cancel Order" button to orderService.cancelOrder()
+     - Handle success/error responses
+     - Update the UI after cancellation
+
+  3. OrderHistoryComponent:
+     - Add a "Reorder" button that creates a new order based on old one (POST)
+     - Add ability to delete old orders from history (DELETE)
+
+  4. NewAccountComponent:
+     - Add ability to update account details (PUT)
+     - Add ability to delete an account (DELETE)
+
+================================================================================
+STEP 11 — REACTIVE FORMS
+================================================================================
+What you learned: ReactiveFormsModule, FormGroup, FormControl, FormBuilder.
+
+What to build:
+  1. Convert LoginComponent to use reactive forms:
+     - Create a FormGroup with username and password FormControls
+     - Replace [(ngModel)] with [formControl] or formControlName
+     - You can keep the template form version as reference/comments
+
+  2. Create an OrderFormComponent (or enhance NewOrderComponent):
+     - Use FormBuilder to create the order form
+     - FormGroup with: customerNotes, deliveryDate, quantity controls
+     - Add dynamic form controls — add/remove products with FormArray
+
+  3. NewAccountComponent:
+     - Convert to reactive form
+     - Use FormBuilder for cleaner code
+
+================================================================================
+STEP 12 — FORM VALIDATION
+================================================================================
+What you learned: Validators, custom validators, async validators, error display.
+
+What to build:
+  1. LoginComponent:
+     - Add Validators.required, Validators.minLength(3) to username
+     - Add Validators.required, Validators.minLength(6) to password
+     - Show specific error messages for each validation failure
+     - Style invalid fields with red borders
+
+  2. NewAccountComponent:
+     - Add Validators.required to all fields
+     - Add Validators.email to email field
+     - Add Validators.pattern for phone number (Saudi format)
+     - Create a custom validator: branchNameValidator — checks if branch name
+       already exists (hardcoded list for now)
+     - Show all validation errors below each field
+
+  3. OrderFormComponent:
+     - Validate that at least one product is selected
+     - Validate delivery date is in the future
+     - Create a custom cross-field validator: check if quantity makes sense
+       for the product type
+
+================================================================================
+STEP 13 — PIPES (CUSTOM)
+================================================================================
+What you learned: Creating custom pipes with @Pipe, PipeTransform.
+
+What to build:
+  1. Create OrderStatusPipe (src/app/pipes/order-status.pipe.ts):
+     - Transforms status codes to readable text
+     - e.g., 'PEND' → 'Pending', 'COMP' → 'Completed', 'CANC' → 'Cancelled'
+
+  2. Create TimeAgoPipe (src/app/pipes/time-ago.pipe.ts):
+     - Transforms a date to "X minutes ago", "X hours ago", etc.
+     - Use in CurrentOrderComponent to show how long ago the order was placed
+
+  3. Create FilterPipe (src/app/pipes/filter.pipe.ts):
+     - Filters an array based on a search term
+     - Use in OrderHistoryComponent to search/filter orders
+     - Use in NewOrderComponent to filter products
+
+================================================================================
+STEP 14 — SERVICES
+================================================================================
+What you learned: @Injectable, providedIn: 'root', dependency injection, shared state.
+
+What to build:
+  1. Refactor/organize your services:
+     - ProductService → handles all product-related API calls
+     - OrderService   → handles all order-related API calls
+     - AuthService    → handles login/logout, stores current user info
+     - UserService    → handles account CRUD for admin
+
+  2. AuthService (src/app/services/auth.service.ts):
+     - Store logged-in user state (use signals!)
+     - Methods: login(), logout(), isLoggedIn(), getCurrentUser(), isAdmin()
+     - Share auth state across components (sidebar, main-layout, etc.)
+
+  3. NotificationService (src/app/services/notification.service.ts):
+     - Show success/error/info messages
+     - Use a signal for the current notification
+     - Auto-dismiss after a few seconds
+     - Use this across all components instead of alert()
+
+================================================================================
+STEP 15 — RESOURCE API & rxResource API
+================================================================================
+What you learned: resource(), rxResource() from @angular/core.
+
+What to build:
+  1. Update NewOrderComponent:
+     - Replace manual HttpClient subscribe with resource() or rxResource()
+     - Let Angular manage the loading/error/data states
+     - Show a loading spinner while fetching products
+     - Show error state if fetch fails
+
+  2. Update OrderHistoryComponent:
+     - Use rxResource to fetch orders
+     - Implement proper loading/error/success states
+     - Use the .value(), .isLoading(), .error() signals in the template
+
+  3. Update DashboardComponent:
+     - Use resource() to load dashboard summary data
+     - Show skeleton loaders while loading
+
+================================================================================
+STEP 16 — HARD-CODED LOGIN
+================================================================================
+What you learned: Basic auth flow without a real backend.
+
+What to build:
+  1. AuthService:
+     - Create a hardcoded users array:
+       [
+         { username: 'admin', password: 'admin123', role: 'admin', name: 'Factory Owner' },
+         { username: 'shop1', password: 'shop123', role: 'owner', name: 'Coffee Shop 1', branch: 'Riyadh' },
+         { username: 'shop2', password: 'shop456', role: 'owner', name: 'Coffee Shop 2', branch: 'Jeddah' }
+       ]
+     - login() checks credentials against this array
+     - Store logged-in user in a signal
+     - isLoggedIn() returns a computed signal
+
+  2. LoginComponent:
+     - Call authService.login(username, password)
+     - On success → navigate to /dashboard
+     - On failure → show error message
+
+  3. SidebarComponent:
+     - Read current user from AuthService
+     - Show/hide admin menu items based on user.role
+     - Show user name and branch in sidebar header
+
+  4. MainLayoutComponent:
+     - Add a logout button that calls authService.logout()
+     - Redirect to /login after logout
+
+================================================================================
+STEP 17 — LOGIN WITH API
+================================================================================
+What you learned: Real authentication with a backend API.
+
+What to build:
+  1. AuthService:
+     - Replace hardcoded login with HttpClient POST to your API
+     - Store the JWT token in localStorage
+     - Add getToken() method
+     - Parse user info from JWT or store from response
+
+  2. LoginComponent:
+     - Handle async login (loading state, error handling)
+     - Show a spinner while login request is in progress
+
+  NOTE: You may not have the AWS backend ready yet. That's fine.
+  Build it so it CALLS the API, but keep the hardcoded fallback.
+  When AWS is ready, just swap the URL.
+
+================================================================================
+STEP 18 — INTERCEPTOR
+================================================================================
+What you learned: HttpInterceptorFn, request/response interception.
+
+What to build:
+  1. Create an AuthInterceptor (src/app/interceptors/auth.interceptor.ts):
+     - Attach the JWT token to every outgoing request's Authorization header
+     - Format: Authorization: Bearer <token>
+     - Register it in app.config.ts with withInterceptors([authInterceptor])
+
+  2. Create a LoadingInterceptor:
+     - Set a global loading signal to true when a request starts
+     - Set it to false when the request completes
+     - Use this to show/hide a global loading bar
+
+  3. Create an ErrorInterceptor:
+     - Catch HTTP errors globally
+     - If 401 → redirect to login (token expired)
+     - If 500 → show a notification via NotificationService
+     - Log errors for debugging
+
+================================================================================
+STEP 19 — canActivate GUARD
+================================================================================
+What you learned: Route guards, canActivate, functional guards.
+
+What to build:
+  1. Create an AuthGuard (src/app/guards/auth.guard.ts):
+     - Functional guard (not class-based)
+     - Check if user is logged in via AuthService
+     - If not → redirect to /login
+     - Apply to all routes except /login
+
+  2. Create an AdminGuard (src/app/guards/admin.guard.ts):
+     - Check if user has 'admin' role
+     - If not → redirect to /dashboard
+     - Apply to admin-only routes: /admin/new-account, etc.
+
+  3. Update app.routes.ts:
+     - Add canActivate: [authGuard] to the main layout route
+     - Add canActivate: [adminGuard] to admin routes
+
+  4. Add a route for /admin/new-account with the admin guard
+
+================================================================================
+BONUS — THINGS YOUR COURSE MIGHT NOT COVER BUT ARE IMPORTANT
+================================================================================
+
+  A. ENVIRONMENT CONFIGURATION
+     - Use environment.ts and environment.prod.ts for API URLs
+     - Switch between local mock and AWS endpoints easily
+
+  B. LAZY LOADING
+     - Use loadComponent in routes (you already saw this in routing)
+     - Each component loads only when its route is visited
+     - This keeps the app fast as it grows
+
+  C. ERROR HANDLING
+     - Create a global error handler
+     - Gracefully handle network failures
+     - Show user-friendly messages instead of blank screens
+
+  D. MODELS/INTERFACES
+     - Create TypeScript interfaces for your data:
+       src/app/models/user.model.ts
+       src/app/models/order.model.ts
+       src/app/models/product.model.ts
+     - Use these everywhere instead of 'any'
+
+  E. RESPONSIVE DESIGN
+     - Make the sidebar collapsible on mobile
+     - Use CSS media queries for different screen sizes
+     - Test on different viewport sizes
+
+================================================================================
+FOLDER STRUCTURE (what it should look like when you're done)
+================================================================================
+
+src/app/
+├── components/
+│   ├── login/
+│   ├── sidebar/
+│   ├── main-layout/
+│   ├── dashboard/
+│   ├── new-order/
+│   ├── order-history/
+│   ├── current-order/
+│   └── new-account/
+├── services/
+│   ├── auth.service.ts
+│   ├── order.service.ts
+│   ├── product.service.ts
+│   ├── user.service.ts
+│   └── notification.service.ts
+├── guards/
+│   ├── auth.guard.ts
+│   └── admin.guard.ts
+├── interceptors/
+│   ├── auth.interceptor.ts
+│   ├── loading.interceptor.ts
+│   └── error.interceptor.ts
+├── directives/
+│   ├── highlight.directive.ts
+│   └── role-badge.directive.ts
+├── pipes/
+│   ├── order-status.pipe.ts
+│   ├── time-ago.pipe.ts
+│   └── filter.pipe.ts
+├── models/
+│   ├── user.model.ts
+│   ├── order.model.ts
+│   └── product.model.ts
+├── app.ts
+├── app.html
+├── app.css
+├── app.routes.ts
+└── app.config.ts
+
+================================================================================
+START HERE
+================================================================================
+
+  1. Open your terminal in the project folder
+  2. Run: ng serve
+  3. Open http://localhost:4200 — you should see "Koki Management App"
+  4. Start your course's COMPONENTS lesson
+  5. When done, come back here and do STEP 1
+  6. After each step, run the app and make sure it works
+  7. Commit your code with git after each step!
+
+Good luck. Build it yourself. Ask me to review when you finish each step.

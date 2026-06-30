@@ -1,0 +1,76 @@
+/* :host {
+  display: flex;
+} */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  background: #fffef5;
+  border-bottom: 1px solid #e8d8c4;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2a0a0a;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.search-input {
+  height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid #e0cfc0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.82rem;
+  outline: none;
+  width: 180px;
+}
+
+.search-input:focus {
+  border-color: #8b1a1a;
+}
+
+.notif-btn {
+  position: relative;
+  background: none;
+  border: 1px solid #e0cfc0;
+  border-radius: 8px;
+  width: 34px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #8b1a1a;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 1px 4px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #8b1a1a;
+  color: #ffeccf;
+  font-size: 0.82rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}

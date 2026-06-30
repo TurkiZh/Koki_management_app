@@ -1,0 +1,236 @@
+.form-card {
+  background: #fffef5;
+  border: 1px solid #e8d8c4;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(42, 10, 10, 0.08);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-header h2 {
+  color: #2a0a0a;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.form-header p {
+  color: #7a5c4a;
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Alert Boxes */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+  animation: slideDownAlert 0.25s ease-out;
+}
+
+.alert-error {
+  background: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  color: #9b1c1c;
+}
+
+.alert-success {
+  background: #fefcf0;
+  border: 1px solid #fce8b2;
+  color: #725002;
+}
+
+.alert-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.alert-text {
+  font-weight: 500;
+}
+
+/* Inputs & Form Groups */
+.login-fields-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #2a0a0a;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.password-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-link {
+  background: transparent;
+  border: none;
+  color: #8b1a1a;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.forgot-link:hover {
+  color: #701414;
+  text-decoration: underline;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: #7a5c4a;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  background: #fffef0;
+  border: 1px solid #e8d8c4;
+  border-radius: 10px;
+  color: #2a0a0a;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-wrapper input::placeholder {
+  color: #bfaea2;
+}
+
+/* Input Focus States */
+.input-wrapper input:focus {
+  border-color: #8b1a1a;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
+}
+
+.input-wrapper input:focus + .input-icon,
+.input-wrapper:focus-within .input-icon {
+  color: #8b1a1a;
+}
+
+/* Invalid States */
+.input-wrapper.input-invalid input {
+  border-color: #f8b4b4;
+}
+
+.input-wrapper.input-invalid input:focus {
+  border-color: #f05252;
+  box-shadow: 0 0 0 3px rgba(240, 82, 82, 0.1);
+}
+
+.field-error {
+  color: #c81e1e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.1rem;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.9rem;
+  background: #8b1a1a;
+  color: #ffeccf;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(139, 26, 26, 0.15);
+}
+
+.submit-btn:hover:not([disabled]) {
+  background: #701414;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(139, 26, 26, 0.25);
+}
+
+.submit-btn:active:not([disabled]) {
+  transform: translateY(0);
+}
+
+.submit-btn[disabled] {
+  background: #dcd4cc;
+  color: #a49c94;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Spinner Animation */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 236, 207, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffeccf;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideDownAlert {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 1.75rem;
+  }
+}
