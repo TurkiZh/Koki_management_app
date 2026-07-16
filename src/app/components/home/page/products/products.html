@@ -1,0 +1,276 @@
+<div class="products-container">
+  <!-- Title greeting row -->
+  <div class="products-title-row">
+    <h1 class="products-title">Products</h1>
+    <p class="products-subtitle">Monday, July 10 - Good morning, {{ authService.currentUser()?.name || 'Admin' }}</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <!-- Card 1: Total Products -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <span class="stat-label">Total Products</span>
+        <span class="stat-icon-wrapper">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+            </path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </span>
+      </div>
+      <div class="stat-value">{{ allProducts().length }}</div>
+      <div class="stat-subtext">In catalog</div>
+    </div>
+
+    <!-- Card 2: Available -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <span class="stat-label">Available</span>
+        <span class="stat-icon-wrapper success">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </span>
+      </div>
+      <div class="stat-value">{{ availableProducts().length }}</div>
+      <div class="stat-subtext">Ready to order</div>
+    </div>
+
+    <!-- Card 3: Low Stock -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <span class="stat-label">Low Stock</span>
+        <span class="stat-icon-wrapper warning">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </span>
+      </div>
+      <div class="stat-value">{{ lowStockProducts().length }}</div>
+      <div class="stat-subtext">Restock soon</div>
+    </div>
+
+    <!-- Card 4: Out of Stock -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <span class="stat-label">Out of Stock</span>
+        <span class="stat-icon-wrapper info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>
+        </span>
+      </div>
+      <div class="stat-value">{{ outOfStockProducts().length }}</div>
+      <div class="stat-subtext">Unavailable</div>
+    </div>
+  </div>
+
+  <!-- Toolbar Filters & Actions -->
+  <div class="products-toolbar">
+    <div class="toolbar-tabs">
+      <button class="tab-btn active">All</button>
+      <button class="tab-btn">Available</button>
+      <button class="tab-btn">Low Stock</button>
+    </div>
+
+    <div class="toolbar-actions">
+      <button class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Export</span>
+      </button>
+
+      @if (authService.currentUser()?.role === 'Admin') {
+      <button class="btn-primary-burgundy" (click)="openModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Product</span>
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- Products Catalog Table Card -->
+  <div class="grid-card products-table-card">
+    <div class="table-wrapper">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Status</th>
+            @if (authService.currentUser()?.role === 'Admin') {
+            <th class="actions-header">Actions</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of allProducts(); track product.id) {
+          <tr [class.selected-row]="$first">
+            <td class="product-info-cell">
+              @if ($first) {
+              <span class="selection-dot"></span>
+              } @else {
+              <div class="no-dot-spacing"></div>
+              }
+              <div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-desc">{{ product.description }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="stock-progress-container">
+                <span class="stock-text">{{ product.price }} </span>
+              </div>
+            </td>
+            <td>
+              <div class="stock-progress-container">
+                <span class="stock-text">{{ product.stockQuantity }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="status-dropdown-wrapper">
+                <select class="status-select" [class.select-available]="product.isAvailable"
+                  [class.select-outofstock]="!product.isAvailable">
+                  <option [value]="true" [selected]="product.isAvailable">Available</option>
+                  <option [value]="false" [selected]="!product.isAvailable">OutOfStock</option>
+                </select>
+              </div>
+            </td>
+            @if (authService.currentUser()?.role === 'Admin') {
+            <td>
+              <div class="actions-cell">
+                <button class="btn-action-icon" (click)="openEditModal(product.id)" title="Edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button class="btn-action-icon delete" (click)="onDeleteProduct(product.id)" title="Delete">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            }
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 2rem; color: #8c7d70;">
+              No products found in the catalog.
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal (Overlay) -->
+  @if (isEditModalOpen() || isAddModalOpen()) {
+  <form [formGroup]="productForm" (ngSubmit)="onSubmitProduct()">
+    <div class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">@if(isAddModalOpen()) {Add Product } @else {Edit Product}</h2>
+            <p class="modal-subtitle">@if(isAddModalOpen()) { Add new product to the catalog } @else { Update product
+              details and availability }</p>
+          </div>
+          <button type="button" class="btn-close-modal" (click)="closeModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Field 1: Product Name -->
+          <div class="form-group">
+            <label class="form-label" for="prodName">Product Name</label>
+            <input type="text" id="prodName" formControlName="name" class="form-input" />
+          </div>
+
+          <!-- Field Row 2: SKU + Price -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="prodPrice">Unit Price</label>
+              <div class="input-with-prefix">
+                <span class="prefix-symbol">$</span>
+                <input type="text" id="prodPrice" formControlName="price" class="form-input with-prefix" value="" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Field Row 3: Stock Quantity + Status -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="prodQty">Stock Quantity</label>
+              <div class="input-with-icon">
+                <input type="number" id="prodQty" formControlName="stockQuantity" class="form-input with-icon"
+                  value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prodStatus">Status</label>
+              <select id="prodStatus" formControlName="isAvailable" class="form-select">
+                <option [value]="true">Available</option>
+                <option [value]="false">Out of Stock</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Field 4: Description -->
+          <div class="form-group">
+            <label class="form-label" for="prodDesc">Description</label>
+            <textarea id="prodDesc" formControlName="description" class="form-textarea" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" type="reset" (click)="closeModal()">Cancel</button>
+          <button class="btn-save" type="submit" [disabled]="productForm.invalid">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            @if (isEditModalOpen()) {
+            <span>Update Product</span>
+            } @else {
+            <span>Add Product</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  }
+</div>

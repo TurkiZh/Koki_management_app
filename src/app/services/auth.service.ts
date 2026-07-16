@@ -1,10 +1,11 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ProductService } from './product.service';
 
 export interface User {
   email: string;
-  role: 'admin' | 'owner';
+  role: 'Admin' | 'Owner' | 'Employee';
   name: string;
   branch?: string;
 }
@@ -19,13 +20,18 @@ export class AuthService {
   // Read-only public views of our state
   currentUser = this.currentUserSignal.asReadonly();
   isLoggedIn = computed(() => this.currentUserSignal() !== null);
-  isAdmin = computed(() => this.currentUserSignal()?.role === 'admin');
+  userRole = computed(() => this.currentUserSignal()?.role);
+
+  getUserData() {
+    return this.currentUserSignal();
+  }
 
   // Mock user database
   private mockUsers = [
-    { email: 'admin@koki.com', password: 'admin123', role: 'admin' as const, name: 'Factory Owner' },
-    { email: 'shop1@koki.com', password: 'shop123', role: 'owner' as const, name: 'Coffee Shop Riyadh', branch: 'Riyadh' },
-    { email: 'shop2@koki.com', password: 'shop456', role: 'owner' as const, name: 'Coffee Shop Jeddah', branch: 'Jeddah' }
+    { email: 'admin@koki.com', password: 'admin123', role: 'Admin' as const, name: 'Turki' },
+    { email: 'emp@koki.com', password: 'emp123', role: 'Employee' as const, name: 'mohammed' },
+    { email: 'shop1@koki.com', password: 'shop111', role: 'Owner' as const, name: 'Coffee Shop Riyadh', branch: 'Riyadh' },
+    { email: 'shop2@koki.com', password: 'shop222', role: 'Owner' as const, name: 'Coffee Shop Dammam', branch: 'Dammam' }
   ];
 
   constructor() {
@@ -55,7 +61,7 @@ export class AuthService {
         name: user.name,
         branch: user.branch
       };
-      
+
       // Simulate network delay
       return new Observable<User>(observer => {
         setTimeout(() => {

@@ -1,0 +1,35 @@
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+        <div class="brand-icon">☕</div>
+        <span class="brand-name">BrewOrder</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
+        <a class="nav-link" routerLink="orders" routerLinkActive="active">Orders</a>
+        @if (userType() !== 'Owner'){
+        <a class="nav-link" routerLink="products" routerLinkActive="active">Products</a>
+        }
+        @if(userType() === 'Admin'){
+        <a class="nav-link" routerLink="accounts" routerLinkActive="active">Accounts</a>
+        }
+        @if(userType() !== 'Employee'){
+        <a class="nav-link" routerLink="analytics" routerLinkActive="active">Analytics</a>
+        <a class="nav-link" routerLink="reports" routerLinkActive="active">Reports</a>
+        }
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <div class="user-avatar">{{authService.currentUser()?.name?.charAt(0)}}</div>
+            <div>
+                <div class="user-name">{{authService.currentUser()?.name}}</div>
+                <div class="user-email">{{authService.currentUser()?.email}}</div>
+            </div>
+        </div>
+        <a class="footer-link" routerLink="settings" routerLinkActive="active">Settings</a>
+        <a class="footer-link danger" routerLink="/login">↩ Sign out</a>
+    </div>
+
+</aside>

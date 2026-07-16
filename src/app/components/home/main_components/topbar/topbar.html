@@ -1,16 +1,17 @@
 <header class="topbar">
 
-  <h1 class="page-title">Admin Dashboard – Home</h1>
+  <h1 class="page-title">{{ pageTitle() }}</h1>
 
   <div class="topbar-right">
     <input id="topbar-search" type="text" class="search-input" placeholder="Search..." />
-    <button id="topbar-notifications" class="notif-btn">
+    <!-- search notification and user avatar will be replaced by sidebar ones-->
+    <!-- <button id="topbar-notifications" class="notif-btn">
       🔔
       @if (hasNotifications()) {
       <span class="notif-badge" [textContent]="notificationCount()"></span>
       }
     </button>
-    <button id="topbar-user" class="user-avatar">A</button>
+    <button id="topbar-user" class="user-avatar">{{authService.currentUser()?.name?.charAt(0)}}</button> -->
   </div>
 
 </header>
