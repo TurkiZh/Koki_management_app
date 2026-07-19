@@ -8,6 +8,7 @@ import { Analytics } from './components/home/page/analytics/analytics';
 import { Reports } from './components/home/page/reports/reports';
 import { Products } from './components/home/page/products/products';
 import { Settings } from './components/home/page/settings/settings';
+import { authGuard } from './auth-guard';
 
 export const routes: Routes = [
   // main route when app start 
@@ -15,6 +16,7 @@ export const routes: Routes = [
   {
     path: '',
     component: HomeLayout,
+    canActivate: [authGuard],
     children: [
       { path: 'home', component: Home },
       { path: 'orders', component: Orders },

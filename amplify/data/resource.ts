@@ -8,18 +8,20 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  UserProfile: a
+  User: a
     .model({
       email: a.string().required(),
       name: a.string().required(),
       role: a.string().required(), // 'Admin' | 'Owner' | 'Employee'
-      branch: a.string(),
       shopName: a.string(),
+      branch: a.string(),
       phone: a.string(),
+      // each user has history of orders
+      order: a.hasMany('Order', 'userId'),
     })
     .authorization((allow) => [
-      allow.guest(),
-      allow.authenticated(),
+      allow.groups(['Admin']),
+      allow.groups(['Owner', 'Employee']).to(['read']),
     ]),
 
   Product: a
@@ -32,8 +34,9 @@ const schema = a.schema({
       description: a.string(),
     })
     .authorization((allow) => [
-      allow.guest(),
-      allow.authenticated(),
+      allow.groups(['Admin']),
+      allow.groups(['Owner', 'Employee']).to(['read']),
+      allow.guest().to(['read']),
     ]),
 
   Order: a
@@ -41,13 +44,16 @@ const schema = a.schema({
       status: a.string().required(), // 'Pending' | 'Completed' | 'Cancelled'
       totalPrice: a.float().required(),
       deliveryDate: a.string(),
-      customerNotes: a.string(),
-      userEmail: a.string().required(),
+      // each order is related to a user
+      userId: a.string().required(),
+      user: a.belongsTo('User', 'userId'),
+      // each order has multiple items
       items: a.hasMany('OrderItem', 'orderId'),
     })
     .authorization((allow) => [
-      allow.guest(),
-      allow.authenticated(),
+      allow.groups(['Admin']),
+      allow.groups(['Owner']).to(['create', 'read']),
+      allow.groups(['Employee']).to(['read', 'update']),
     ]),
 
   OrderItem: a
@@ -59,8 +65,9 @@ const schema = a.schema({
       price: a.float().required(),
     })
     .authorization((allow) => [
-      allow.guest(),
-      allow.authenticated(),
+      allow.groups(['Admin']),
+      allow.groups(['Owner']).to(['create', 'read']),
+      allow.groups(['Employee']).to(['read']),
     ]),
 
   getOrderStats: a
@@ -68,8 +75,7 @@ const schema = a.schema({
     .returns(a.string())
     .handler(a.handler.function(orderStats))
     .authorization((allow) => [
-      allow.guest(),
-      allow.authenticated(),
+      allow.groups(['Admin']),
     ]),
 });
 
@@ -78,7 +84,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'identityPool',
+    defaultAuthorizationMode: 'userPool',
   },
 });
 

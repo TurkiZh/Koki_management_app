@@ -5,7 +5,6 @@ import outputs from '../../amplify_outputs.json'; // Path depends on your direct
 
 Amplify.configure(outputs);
 
-
 @Component({
   standalone: true,
   selector: 'app-root',
@@ -14,6 +13,6 @@ Amplify.configure(outputs);
   styleUrl: './app.css'
 })
 export class App {
-  title = signal('Swirls-sa Portal');
+  title = signal('Koki Management App');
 }
 

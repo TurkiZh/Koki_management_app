@@ -80,9 +80,9 @@
   <!-- Toolbar Filters & Actions -->
   <div class="products-toolbar">
     <div class="toolbar-tabs">
-      <button class="tab-btn active">All</button>
-      <button class="tab-btn">Available</button>
-      <button class="tab-btn">Low Stock</button>
+      <button class="tab-btn" routerLinkActive="active">All</button>
+      <button class="tab-btn" routerLinkActive="active">Available</button>
+      <button class="tab-btn" routerLinkActive="active">Low Stock</button>
     </div>
 
     <div class="toolbar-actions">
@@ -116,8 +116,8 @@
         <thead>
           <tr>
             <th>Product</th>
-            <th>Stock</th>
             <th>Price</th>
+            <th>Stock</th>
             <th>Status</th>
             @if (authService.currentUser()?.role === 'Admin') {
             <th class="actions-header">Actions</th>
@@ -140,7 +140,7 @@
             </td>
             <td>
               <div class="stock-progress-container">
-                <span class="stock-text">{{ product.price }} </span>
+                <span class="stock-text">ريال {{ product.price }}</span>
               </div>
             </td>
             <td>
@@ -213,14 +213,14 @@
         <div class="modal-body">
           <!-- Field 1: Product Name -->
           <div class="form-group">
-            <label class="form-label" for="prodName">Product Name</label>
+            <label class="form-label" for="prodName">Product Name*</label>
             <input type="text" id="prodName" formControlName="name" class="form-input" />
           </div>
 
           <!-- Field Row 2: SKU + Price -->
           <div class="form-row-2">
             <div class="form-group">
-              <label class="form-label" for="prodPrice">Unit Price</label>
+              <label class="form-label" for="prodPrice">Unit Price*</label>
               <div class="input-with-prefix">
                 <span class="prefix-symbol">$</span>
                 <input type="text" id="prodPrice" formControlName="price" class="form-input with-prefix" value="" />
@@ -231,17 +231,17 @@
           <!-- Field Row 3: Stock Quantity + Status -->
           <div class="form-row-2">
             <div class="form-group">
-              <label class="form-label" for="prodQty">Stock Quantity</label>
+              <label class="form-label" for="prodQty">Stock Quantity*</label>
               <div class="input-with-icon">
                 <input type="number" id="prodQty" formControlName="stockQuantity" class="form-input with-icon"
                   value="" />
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="prodStatus">Status</label>
+              <label class="form-label" for="prodStatus">Status*</label>
               <select id="prodStatus" formControlName="isAvailable" class="form-select">
                 <option [value]="true">Available</option>
-                <option [value]="false">Out of Stock</option>
+                <option [value]="false">Not Available</option>
               </select>
             </div>
           </div>
@@ -262,10 +262,10 @@
               <polyline points="17 21 17 13 7 13 7 21"></polyline>
               <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
-            @if (isEditModalOpen()) {
-            <span>Update Product</span>
-            } @else {
+            @if (isAddModalOpen()) {
             <span>Add Product</span>
+            } @else {
+            <span>Update Product</span>
             }
           </button>
         </div>

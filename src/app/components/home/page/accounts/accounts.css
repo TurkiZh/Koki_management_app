@@ -1,0 +1,541 @@
+.accounts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #2a0a0a;
+}
+
+/* Header greeting */
+.accounts-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.accounts-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0;
+  color: #2a0a0a;
+}
+
+.accounts-subtitle {
+  font-size: 0.85rem;
+  color: #8c7d70;
+  margin: 0;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #f0e6d6;
+  border-radius: 14px;
+  padding: 1.15rem;
+  box-shadow: 0 2px 4px rgba(42, 10, 10, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #8c7d70;
+}
+
+.stat-icon-wrapper {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7efe5;
+  color: #2a0a0a;
+}
+
+/* Burgundy Highlighted Icon for Shop Owners */
+.stat-icon-wrapper.shop-owners {
+  background: #8b1a1a;
+  color: #ffffff;
+}
+
+.stat-value {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #2a0a0a;
+  line-height: 1.1;
+}
+
+.stat-subtext {
+  font-size: 0.72rem;
+  color: #a39587;
+}
+
+/* Toolbar Filters & Actions */
+.accounts-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-tabs {
+  display: flex;
+  gap: 0.35rem;
+  background: #f1ebd9;
+  padding: 0.25rem;
+  border-radius: 24px;
+}
+
+.tab-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5c4e43;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #2a0a0a;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn.active {
+  background: #8b1a1a;
+  color: #ffffff;
+}
+
+.btn-primary-burgundy {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  background: #8b1a1a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary-burgundy:hover {
+  background: #721212;
+}
+
+/* Table Card styling */
+.accounts-table-card {
+  background: #ffffff;
+  border: 1px solid #f0e6d6;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(42, 10, 10, 0.02);
+  padding: 1rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.accounts-table th {
+  padding: 0.85rem 1rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #8c7d70;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #f5ebd9;
+}
+
+.accounts-table td {
+  padding: 0.95rem 1rem;
+  font-size: 0.82rem;
+  color: #3d2d20;
+  border-bottom: 1px solid #f9f5ed;
+  vertical-align: middle;
+}
+
+.accounts-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.accounts-table tbody tr:hover {
+  background: #fffdfa;
+}
+
+/* Selected row dot indicator */
+.accounts-table tbody tr.selected-row {
+  background: #fdf5e6;
+}
+
+.name-cell-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.selection-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #8b1a1a;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.no-dot-spacing {
+  width: 5px;
+  flex-shrink: 0;
+}
+
+/* Avatar design */
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.user-avatar.color-orange { background-color: #d97706; }
+.user-avatar.color-burgundy { background-color: #8b1a1a; }
+.user-avatar.color-brown { background-color: #78350f; }
+.user-avatar.color-red { background-color: #b91c1c; }
+.user-avatar.color-coral { background-color: #e11d48; }
+
+.user-name {
+  font-weight: 700;
+  color: #2a0a0a;
+}
+
+/* Status Badges */
+.status-text {
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.status-text.active {
+  color: #d97706;
+}
+
+.status-badge.suspended {
+  background-color: #8b1a1a;
+  color: #ffffff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+/* Actions */
+.actions-header {
+  text-align: right;
+  padding-right: 1.25rem !important;
+}
+
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  padding-right: 0.5rem;
+}
+
+.btn-action-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #eedec8;
+  background: #ffffff;
+  color: #8b1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-action-icon:hover {
+  border-color: #8b1a1a;
+  background: #fff8f0;
+}
+
+.btn-action-icon.delete {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.btn-action-icon.delete:hover {
+  border-color: #dc2626;
+  background: #fff5f5;
+}
+
+/* Modal Overlay Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(42, 10, 10, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: 95%;
+  max-width: 480px;
+  background: #fffdfa;
+  border: 1px solid #eedec8;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(42, 10, 10, 0.15);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #f0e6d6;
+  padding-bottom: 0.75rem;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #2a0a0a;
+  margin: 0;
+}
+
+.modal-subtitle {
+  font-size: 0.75rem;
+  color: #8c7d70;
+  margin: 0.2rem 0 0 0;
+}
+
+.btn-close-modal {
+  background: #fdf5e6;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #8b1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-close-modal:hover {
+  background: #f8ebd4;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+/* Forms layout */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: #5c4e43;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 0.75rem;
+  color: #8c7d70;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.input-icon-right {
+  position: absolute;
+  right: 0.75rem;
+  color: #8c7d70;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  padding: 0.55rem 0.75rem 0.55rem 2rem;
+  border: 1px solid #eedec8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.82rem;
+  color: #3d2d20;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.form-input:focus {
+  border-color: #8b1a1a;
+}
+
+.form-input.password-input {
+  padding-right: 2rem;
+}
+
+/* Custom Role Select Card Grid */
+.role-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.role-card-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.role-card-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.role-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.5rem;
+  border: 1px solid #eedec8;
+  border-radius: 8px;
+  background: #fffdfa;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #5c4e43;
+  transition: all 0.2s ease;
+}
+
+.role-card-content svg {
+  flex-shrink: 0;
+}
+
+.role-card-option input[type="radio"]:checked + .role-card-content {
+  border-color: #8b1a1a;
+  background-color: #fdf5e6;
+  color: #8b1a1a;
+  box-shadow: 0 0 0 1px #8b1a1a;
+}
+
+.role-card-option:hover .role-card-content {
+  background-color: #fcf6ed;
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid #f0e6d6;
+  padding-top: 1rem;
+}
+
+.btn-cancel {
+  padding: 0.55rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid #eedec8;
+  background: #fffdfa;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #5c4e43;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-cancel:hover {
+  background: #f7efe5;
+}
+
+.btn-save {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background: #8b1a1a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-save:hover {
+  background: #721212;
+}
+
+/* Responsive breakpoint */
+@media (max-width: 576px) {
+  .role-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .accounts-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .toolbar-tabs {
+    justify-content: center;
+  }
+}

@@ -1,6 +1,8 @@
 import { Component, signal, computed, output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { signIn } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-login-form',
@@ -10,16 +12,14 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './form.css'
 })
 export class LoginForm {
-  private authService = inject(AuthService);
-
-  // Form signals
   email = signal('');
   password = signal('');
   isLoading = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
 
-  // Output event to notify parent on login success
+  private authService = inject(AuthService);
+  private router = inject(Router);
   loginSuccess = output<any>();
 
   // Regex for basic email validation
@@ -31,28 +31,51 @@ export class LoginForm {
   isFormValid = computed(() => this.isEmailValid() && this.isPasswordValid());
   isButtonDisabled = computed(() => !this.isFormValid() || this.isLoading());
 
-  onLogin() {
+  async onSubmitLogin() {
     if (!this.isFormValid() || this.isLoading()) return;
+
+    const emailVal = this.email().trim();
+    const passwordVal = this.password();
 
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    this.authService.login(this.email().trim(), this.password()).subscribe({
-      next: (user) => {
-        this.isLoading.set(false);
-        this.successMessage.set(`Welcome back, ${user.name}! Redirecting...`);
-        
-        // Let the success message show briefly before emitting the event
+    // List of mock user emails for debug purposes
+    const mockEmails = ['admin@koki.com', 'emp@koki.com', 'shop1@koki.com', 'shop2@koki.com'];
+
+    if (mockEmails.includes(emailVal.toLowerCase())) {
+      // Mock Users Auth Flow
+      this.authService.login(emailVal, passwordVal).subscribe({
+        next: (user) => {
+          this.successMessage.set(`Welcome back, ${user.name}! Redirecting...`);
+          setTimeout(() => {
+            this.loginSuccess.emit(user);
+            this.isLoading.set(false);
+          }, 800);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.errorMessage.set(error.message || 'Authentication failed. Please try again.');
+        }
+      });
+    } else {
+      // AWS Cognito Auth Flow
+      try {
+        const result = await signIn({
+          username: emailVal,
+          password: passwordVal,
+        });
+        this.successMessage.set('Sign in successful! Redirecting...');
         setTimeout(() => {
-          this.loginSuccess.emit(user);
+          this.loginSuccess.emit({ email: emailVal, role: 'Employee', name: 'Cognito User' });
+          this.isLoading.set(false);
         }, 800);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
+      } catch (error: any) {
         this.errorMessage.set(error.message || 'Authentication failed. Please try again.');
+        this.isLoading.set(false);
       }
-    });
+    }
   }
 
   onForgotPassword() {
@@ -69,7 +92,7 @@ export class LoginForm {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    // Simulate password reset request
+    // Simulate password reset request or trigger AWS Cognito forgot password
     setTimeout(() => {
       this.isLoading.set(false);
       this.successMessage.set(`A password reset link has been sent to ${this.email().trim()}`);

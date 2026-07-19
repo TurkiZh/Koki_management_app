@@ -28,6 +28,7 @@ export class Products {
     description: '',
   }
 
+  // filters 
   allProducts = signal<Product[]>([]);
   lowStockProducts = signal<Product[]>([]);
   availableProducts = signal<Product[]>([]);
@@ -46,6 +47,7 @@ export class Products {
 
   async openEditModal(productId: string) {
     this.isEditModalOpen.set(true);
+    this.isAddModalOpen.set(false);
     const productValue = await this.productService.getProduct(productId);
     this.productForm.patchValue({
       id: productId,
@@ -61,6 +63,7 @@ export class Products {
   closeModal() {
     this.isAddModalOpen.set(false);
     this.isEditModalOpen.set(false);
+    this.productForm.reset();
   }
 
   async ngOnInit() {
@@ -105,7 +108,6 @@ export class Products {
       }
       this.loadProducts();
       this.closeModal();
-      this.productForm.reset();
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -143,6 +145,8 @@ export class Products {
     this.lowStockProducts.set(this.allProducts().filter(p => p.isAvailable === true && p.stockQuantity <= 20 && p.stockQuantity > 0));
     this.outOfStockProducts.set(this.allProducts().filter(p => p.stockQuantity === 0 || p.isAvailable === false));
   }
+
+
 
 }
 
