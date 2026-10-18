@@ -2,7 +2,8 @@ import { Component, signal, computed, output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { signIn } from 'aws-amplify/auth';
+import { auth } from '../../../app.config';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 @Component({
   selector: 'app-login-form',
@@ -41,7 +42,7 @@ export class LoginForm {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    // List of mock user emails for debug purposes
+    // List of mock user emails for local development
     const mockEmails = ['admin@koki.com', 'emp@koki.com', 'shop1@koki.com', 'shop2@koki.com'];
 
     if (mockEmails.includes(emailVal.toLowerCase())) {
@@ -60,25 +61,30 @@ export class LoginForm {
         }
       });
     } else {
-      // AWS Cognito Auth Flow
+      // Firebase Auth Flow
       try {
-        const result = await signIn({
-          username: emailVal,
-          password: passwordVal,
-        });
-        this.successMessage.set('Sign in successful! Redirecting...');
+        const user = await this.authService.loginWithFirebase(emailVal, passwordVal);
+        this.successMessage.set(`Welcome back, ${user.name}! Redirecting...`);
         setTimeout(() => {
-          this.loginSuccess.emit({ email: emailVal, role: 'Employee', name: 'Cognito User' });
+          this.loginSuccess.emit(user);
           this.isLoading.set(false);
         }, 800);
       } catch (error: any) {
-        this.errorMessage.set(error.message || 'Authentication failed. Please try again.');
+        let msg = 'Authentication failed. Please try again.';
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+          msg = 'Invalid email or password.';
+        } else if (error.code === 'auth/user-not-found') {
+          msg = 'No account found with this email.';
+        } else if (error.message) {
+          msg = error.message;
+        }
+        this.errorMessage.set(msg);
         this.isLoading.set(false);
       }
     }
   }
 
-  onForgotPassword() {
+  async onForgotPassword() {
     if (!this.email().trim()) {
       this.errorMessage.set('Please enter your email address to reset your password.');
       return;
@@ -92,10 +98,13 @@ export class LoginForm {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    // Simulate password reset request or trigger AWS Cognito forgot password
-    setTimeout(() => {
+    try {
+      await sendPasswordResetEmail(auth, this.email().trim());
       this.isLoading.set(false);
       this.successMessage.set(`A password reset link has been sent to ${this.email().trim()}`);
-    }, 1200);
+    } catch (err: any) {
+      this.isLoading.set(false);
+      this.errorMessage.set(err.message || 'Failed to send password reset email.');
+    }
   }
 }

@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
-import { signOut } from '@aws-amplify/auth';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,8 +15,7 @@ export class Sidebar {
   userType = signal<string>(this.authService.userRole() ?? "Unknown");
 
   async logout() {
-    await signOut();
-    this.authService.logout();
+    await this.authService.logout();
     this.userType.set("Unknown");
   }
 }

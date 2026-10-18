@@ -18,7 +18,6 @@ export class Products {
   //Form for adding a new product
   productForm!: FormGroup;
 
-
   editProduct = {
     name: '',
     price: 0,
@@ -26,7 +25,7 @@ export class Products {
     isAvailable: false,
     imageUrl: '',
     description: '',
-  }
+  };
 
   // filters 
   allProducts = signal<Product[]>([]);
@@ -37,8 +36,7 @@ export class Products {
   constructor(
     private productService: ProductService,
     private fb: FormBuilder
-  ) {
-  }
+  ) {}
 
   openModal() {
     this.isEditModalOpen.set(true);
@@ -72,7 +70,7 @@ export class Products {
       const products = await this.productService.getProducts();
       this.allProducts.set(products || []);
 
-      //Filter the data array using native JavaScript logic
+      // Filter the data array using native JavaScript logic
       this.filterInventory();
     } catch (error) {
       console.error('Error initializing products component:', error);
@@ -84,20 +82,20 @@ export class Products {
       stockQuantity: [0, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       imageUrl: [''],
-      isAvailable: [],
+      isAvailable: [true],
     });
   }
+
   loadProducts() {
     this.productService.getProducts().then(products => {
-      this.allProducts.set(products);
+      this.allProducts.set(products || []);
       this.filterInventory();
-
     });
   }
 
   async onSubmitProduct() {
     if (this.productForm.invalid) {
-      alert('Please fill in the form correctly!')
+      alert('Please fill in the form correctly!');
       return;
     }
     try {
@@ -109,7 +107,7 @@ export class Products {
       this.loadProducts();
       this.closeModal();
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error('Error saving product:', error);
     }
   }
 
@@ -122,31 +120,10 @@ export class Products {
     }
   }
 
-  // async onUpdateProduct() {
-  //   if (this.productForm.invalid) {
-  //     alert('Please fill in the form correctly!2')
-  //     return;
-  //   }
-  //   try {
-  //     await this.productService.updateProduct(this.productForm.value);
-  //     this.loadProducts();
-  //     this.closeModal();
-  //     this.productForm.reset();
-  //   } catch (error) {
-  //     console.error('Error updating product:', error);
-  //   }
-  // }
-
   // JavaScript array filtering method
   filterInventory() {
-    // Example A: Get products out of stock or low in stock (e.g., stock is 0)
-    // Note: Ensure your schema has a "stock" field, or filter by availability:
     this.availableProducts.set(this.allProducts().filter(p => p.isAvailable === true && p.stockQuantity > 20));
     this.lowStockProducts.set(this.allProducts().filter(p => p.isAvailable === true && p.stockQuantity <= 20 && p.stockQuantity > 0));
     this.outOfStockProducts.set(this.allProducts().filter(p => p.stockQuantity === 0 || p.isAvailable === false));
   }
-
-
-
 }
-

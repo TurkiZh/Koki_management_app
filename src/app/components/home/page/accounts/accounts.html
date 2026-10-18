@@ -159,7 +159,8 @@
   -->
   @if (isEditModalOpen() || isAddModalOpen()) {
   <div class="modal-overlay">
-    <div class="modal-card">
+    <form [formGroup]="userForm" class="modal-card">
+      <!-- <div class="modal-card"> -->
       <div class="modal-header">
         <div>
           <h2 class="modal-title">@if (isAddModalOpen()){Create New Account}@else{Edit User}</h2>
@@ -184,7 +185,7 @@
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <input type="text" id="accFullName" class="form-input" placeholder="e.g. Yacine Bouzidi" required>
+            <input type="text" id="accFullName" formControlName="name" class="form-input" placeholder="e.g. Yacine Bouzidi">
           </div>
         </div>
 
@@ -197,8 +198,7 @@
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
-            <input type="text" id="accEmailUsername" class="form-input" placeholder="e.g. user@shop.com or username"
-              required>
+            <input type="text" id="accEmailUsername" formControlName="email" class="form-input" placeholder="e.g. user@shop.com or username">
           </div>
         </div>
 
@@ -206,9 +206,9 @@
         <div class="form-group">
           <label class="form-label">Role*</label>
           <div class="role-cards-grid">
-            <!-- Option A: Shop Owner (Checked by default) -->
+            <!-- Option A: Shop Owner -->
             <label class="role-card-option">
-              <input type="radio" name="accountRole" value="Owner" checked (click)="userTypeChange('Owner')">
+              <input type="radio" formControlName="role" value="Owner" (click)="userTypeChange('Owner')">
               <div class="role-card-content">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -221,7 +221,7 @@
 
             <!-- Option B: Employee -->
             <label class="role-card-option">
-              <input type="radio" name="accountRole" value="Employee" (click)="userTypeChange('Employee')">
+              <input type="radio" formControlName="role" value="Employee" (click)="userTypeChange('Employee')">
               <div class="role-card-content">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -232,9 +232,9 @@
               </div>
             </label>
 
-            <!-- Option C: Admin (New Option Added) -->
+            <!-- Option C: Admin -->
             <label class="role-card-option">
-              <input type="radio" name="accountRole" value="Admin" (click)="userTypeChange('Admin')">
+              <input type="radio" formControlName="role" value="Admin" (click)="userTypeChange('Admin')">
               <div class="role-card-content">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -249,7 +249,7 @@
         @if (showShopNameField()) {
         <!-- Field 4: Shop -->
         <div class="form-group">
-          <label class="form-label" for="accShop">Shop</label>
+          <label class="form-label" for="accShop">Shop*</label>
           <div class="input-container">
             <svg class="input-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -257,12 +257,12 @@
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="2" y1="13" x2="22" y2="13"></line>
             </svg>
-            <input type="text" id="accShop" class="form-input" placeholder="Shop" required>
+            <input type="text" id="accShop" formControlName="shopName" class="form-input" placeholder="Shop">
           </div>
         </div>
         <!-- Field 5: Branch -->
         <div class="form-group">
-          <label class="form-label" for="accBranch">Branch</label>
+          <label class="form-label" for="accBranch">Branch*</label>
           <div class="input-container">
             <svg class="input-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -270,14 +270,14 @@
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="2" y1="13" x2="22" y2="13"></line>
             </svg>
-            <input type="text" id="accBranch" class="form-input" placeholder="e.g. Khobar" required>
+            <input type="text" id="accBranch" formControlName="branch" class="form-input" placeholder="e.g. Khobar">
           </div>
         </div>
         }
 
         <!-- Field 6: Phone Number-->
         <div class="form-group">
-          <label class="form-label" for="accPhone">Phone Number*</label>
+          <label class="form-label" for="accPhone">Phone Number</label>
           <div class="input-container">
             <svg class="input-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -285,20 +285,21 @@
                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
               </path>
             </svg>
-            <input type="text" id="accPhone" class="form-input" placeholder="Phone Number" required>
+            <input type="text" id="accPhone" formControlName="phone" class="form-input" placeholder="Phone Number">
           </div>
         </div>
 
         <!-- Field 7: Password -->
+        @if (isAddModalOpen()) {
         <div class="form-group">
-          <label class="form-label" for="accPassword">Password</label>
+          <label class="form-label" for="accPassword">Password*</label>
           <div class="input-container">
             <svg class="input-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            <input type="password" id="accPassword" class="form-input password-input" placeholder="••••••••" required>
+            <input type="password" id="accPassword" formControlName="password" class="form-input password-input" placeholder="••••••••">
             <!-- Toggle password visibility icon -->
             <span class="input-icon-right" title="Toggle visibility">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -311,12 +312,13 @@
             </span>
           </div>
         </div>
+        }
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
         @if (authService.currentUser()?.role === 'Admin') {
-        <button class="btn-save" type="submit">
+        <button class="btn-save" type="submit" (click)="onSubmitUser()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -332,7 +334,9 @@
         </button>
         }
       </div>
-    </div>
+      <!-- </div> -->
+    </form>
   </div>
+
   }
 </div>
